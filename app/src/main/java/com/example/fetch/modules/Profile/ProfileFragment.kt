@@ -1,4 +1,4 @@
-package com.example.fetch.modules.Profile
+package com.example.fetch.Modules.Profile
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

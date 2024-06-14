@@ -1,4 +1,4 @@
-package com.example.fetch.modules.Feed
+package com.example.fetch.Modules.Feed
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
