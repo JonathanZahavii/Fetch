@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.example.fetch.modules.auth.SignInFragment"
+        android:name="com.example.fetch.Modules.auth.SignInFragment"
         android:label="Sign In"
         tools:layout="@layout/fragment_sign_in">
         <action
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/signUpFragment"
-        android:name="com.example.fetch.modules.auth.SignUpFragment"
+        android:name="com.example.fetch.Modules.auth.SignUpFragment"
         android:label="Sign Up"
         tools:layout="@layout/fragment_sign_up">
         <action

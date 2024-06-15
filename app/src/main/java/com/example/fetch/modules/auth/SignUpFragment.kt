@@ -1,4 +1,4 @@
-package com.example.fetch.modules.auth
+package com.example.fetch.Modules.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
