@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.example.fetch.R
 import com.example.fetch.databinding.FragmentFeedBinding
+import com.example.fetch.models.PostType
 
 class FeedFragment : Fragment() {
 
@@ -26,7 +26,15 @@ class FeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnAddPost.setOnClickListener {
-            findNavController().navigate(R.id.action_feedFragment_to_addPostFragment)
+            val action =
+                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.SINGLE.name)
+            findNavController().navigate(action)
+        }
+
+        binding.btnAddPlaydate.setOnClickListener {
+            val action =
+                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.PLAYDATE.name)
+            findNavController().navigate(action)
         }
     }
 

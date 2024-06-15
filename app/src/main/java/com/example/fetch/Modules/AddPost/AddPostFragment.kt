@@ -1,6 +1,8 @@
 package com.example.fetch.Modules.AddPost
 
 import android.app.Activity
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -13,11 +15,14 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.fetch.R
 import com.example.fetch.databinding.FragmentAddPostBinding
+import com.example.fetch.models.PostType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import java.util.Calendar
 import java.util.UUID
 
 class AddPostFragment : Fragment() {
@@ -29,7 +34,10 @@ class AddPostFragment : Fragment() {
     private lateinit var storage: FirebaseStorage
     private var imageUri: Uri? = null
 
+    private val args: AddPostFragmentArgs by navArgs()
+
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
+    private var selectedDateTime: Calendar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -60,12 +68,25 @@ class AddPostFragment : Fragment() {
             pickImageLauncher.launch(intent)
         }
 
+        val postType = PostType.valueOf(args.postType)
+        if (postType == PostType.PLAYDATE) {
+            binding.dateTimeLayout.visibility = View.VISIBLE
+        } else {
+            binding.dateTimeLayout.visibility = View.GONE
+        }
+
+        binding.btnPickDateTime.setOnClickListener {
+            showDateTimePicker()
+        }
+
         binding.btnAddPost.setOnClickListener {
             val petName = binding.etPetName.text.toString().trim()
             val location = binding.etLocation.text.toString().trim()
             val caption = binding.etCaption.text.toString().trim()
 
-            if (petName.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null) {
+            if (petName.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null ||
+                (postType == PostType.PLAYDATE && selectedDateTime == null)
+            ) {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -73,17 +94,55 @@ class AddPostFragment : Fragment() {
             // Show the progress overlay
             binding.progressOverlay.visibility = View.VISIBLE
 
-            uploadPost(petName, location, caption)
+            uploadPost(petName, location, caption, postType, selectedDateTime)
         }
     }
 
-    private fun uploadPost(petName: String, location: String, caption: String) {
+    private fun showDateTimePicker() {
+        val currentDateTime = Calendar.getInstance()
+        DatePickerDialog(
+            requireContext(),
+            { _, year, month, dayOfMonth ->
+                TimePickerDialog(
+                    requireContext(),
+                    { _, hourOfDay, minute ->
+                        selectedDateTime = Calendar.getInstance().apply {
+                            set(year, month, dayOfMonth, hourOfDay, minute)
+                        }
+                        binding.tvDateTime.text =
+                            "${dayOfMonth}/${month + 1}/${year} ${hourOfDay}:${minute}"
+                    },
+                    currentDateTime.get(Calendar.HOUR_OF_DAY),
+                    currentDateTime.get(Calendar.MINUTE),
+                    true
+                ).show()
+            },
+            currentDateTime.get(Calendar.YEAR),
+            currentDateTime.get(Calendar.MONTH),
+            currentDateTime.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
+    private fun uploadPost(
+        petName: String,
+        location: String,
+        caption: String,
+        postType: PostType,
+        dateTime: Calendar?
+    ) {
         val storageRef = storage.reference.child("posts/${UUID.randomUUID()}")
         imageUri?.let {
             storageRef.putFile(it)
                 .addOnSuccessListener { taskSnapshot ->
                     taskSnapshot.storage.downloadUrl.addOnSuccessListener { uri ->
-                        savePostToFirestore(petName, location, caption, uri.toString())
+                        savePostToFirestore(
+                            petName,
+                            location,
+                            caption,
+                            postType,
+                            dateTime,
+                            uri.toString()
+                        )
                     }
                 }
                 .addOnFailureListener {
@@ -106,6 +165,8 @@ class AddPostFragment : Fragment() {
         petName: String,
         location: String,
         caption: String,
+        postType: PostType,
+        dateTime: Calendar?,
         imageUrl: String
     ) {
         val currentUser = auth.currentUser
@@ -122,7 +183,9 @@ class AddPostFragment : Fragment() {
             "caption" to caption,
             "imageUrl" to imageUrl,
             "userId" to currentUser.uid,
-            "timestamp" to System.currentTimeMillis()
+            "timestamp" to System.currentTimeMillis(),
+            "postType" to postType,
+            "dateTime" to dateTime?.timeInMillis
         )
 
         firestore.collection("posts").add(post)

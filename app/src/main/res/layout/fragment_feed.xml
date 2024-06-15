@@ -18,4 +18,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/add_post" />
+
+    <Button
+        android:id="@+id/btnAddPlaydate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_playdate" />
 </LinearLayout>

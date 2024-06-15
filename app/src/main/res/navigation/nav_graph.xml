@@ -30,15 +30,13 @@
     <fragment
         android:id="@+id/feedFragment"
         android:name="com.example.fetch.Modules.Feed.FeedFragment"
-        android:label="Home"
+        android:label="Feed"
         tools:layout="@layout/fragment_feed">
         <action
-            android:id="@+id/action_feedFragment_to_profileFragment"
-            app:destination="@id/profileFragment" />
-        <action
             android:id="@+id/action_feedFragment_to_addPostFragment"
-            app:destination="@id/addPostFragment" />
+            app:destination="@id/addPostFragment"></action>
     </fragment>
+
 
     <fragment
         android:id="@+id/profileFragment"
@@ -55,6 +53,9 @@
         android:name="com.example.fetch.Modules.AddPost.AddPostFragment"
         android:label="Add Post"
         tools:layout="@layout/fragment_add_post">
+        <argument
+            android:name="postType"
+            app:argType="string" />
         <action
             android:id="@+id/action_addPost_to_feedFragment"
             app:destination="@id/feedFragment" />
