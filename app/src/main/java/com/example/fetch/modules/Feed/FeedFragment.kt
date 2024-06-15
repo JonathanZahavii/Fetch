@@ -1,10 +1,12 @@
 package com.example.fetch.Modules.Feed
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.fetch.R
 import com.example.fetch.databinding.FragmentFeedBinding
 
 class FeedFragment : Fragment() {
@@ -18,6 +20,14 @@ class FeedFragment : Fragment() {
     ): View? {
         _binding = FragmentFeedBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btnAddPost.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_addPostFragment)
+        }
     }
 
     override fun onDestroyView() {
