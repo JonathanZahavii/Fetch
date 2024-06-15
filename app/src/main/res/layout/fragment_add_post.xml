@@ -35,20 +35,48 @@
             android:inputType="text" />
 
         <EditText
-            android:id="@+id/etLocation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/location"
-            android:importantForAutofill="no"
-            android:inputType="text" />
-
-        <EditText
             android:id="@+id/etCaption"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/caption"
             android:importantForAutofill="no"
             android:inputType="text" />
+
+        <EditText
+            android:id="@+id/etLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/where"
+            android:importantForAutofill="no"
+            android:inputType="text" />
+
+        <!-- Playdate specific field -->
+        <LinearLayout
+            android:id="@+id/dateTimeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tvDateTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:text="Selected Date Time"
+                android:textSize="18sp" />
+            <!--                android:paddingLeft="8dp"-->
+            <!--                android:paddingTop="8dp"-->
+            <!--                android:paddingBottom="8dp"-->
+            <Button
+                android:id="@+id/btnPickDateTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Pick Date Time" />
+
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnAddPost"
