@@ -20,8 +20,11 @@ class MainActivity : AppCompatActivity() {
         navController = navHostFragment?.navController
 
         // Check if user is logged in
-        if (auth!!.currentUser == null) {
+        val currentUser = auth!!.currentUser
+        if (currentUser == null) {
             navController!!.navigate(R.id.signInFragment)
+        } else {
+            navController?.navigate(R.id.feedFragment)
         }
     }
 }

@@ -1,7 +1,7 @@
-package com.example.fetch.modules.auth
+package com.example.fetch.Modules.auth
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +31,24 @@ class SignInFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
+        val sharedPreferences =
+            requireActivity().getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+
+        // Check if "Remember Me" was selected
+        val savedEmail = sharedPreferences.getString("email", "")
+        val savedPassword = sharedPreferences.getString("password", "")
+        val isRemembered = sharedPreferences.getBoolean("rememberMe", false)
+
+        if (isRemembered) {
+            binding.etEmail.setText(savedEmail)
+            binding.etPassword.setText(savedPassword)
+            binding.cbRememberMe.isChecked = true
+        }
+
         binding.btnSignIn.setOnClickListener {
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
+            val email = binding.etEmail.text.toString().trim()
+            val password = binding.etPassword.text.toString().trim()
 
             if (email.isEmpty()) {
                 binding.etEmail.error = "Email is required"
@@ -51,7 +66,17 @@ class SignInFragment : Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(context, "Sign In Successful", Toast.LENGTH_SHORT).show()
-                        // Navigate to main screen
+
+                        // Save "Remember Me" preference
+                        if (binding.cbRememberMe.isChecked) {
+                            editor.putString("email", email)
+                            editor.putString("password", password)
+                            editor.putBoolean("rememberMe", true)
+                        } else {
+                            editor.clear()
+                        }
+                        editor.apply()
+
                         findNavController().navigate(R.id.action_signInFragment_to_feedFragment)
                     } else {
                         Toast.makeText(

@@ -5,9 +5,10 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="add_post">Add Post</string>
-    <string name="postphoto">PostPhoto</string>
+    <string name="post_photo">Post Photo</string>
     <string name="select_image">Select Image</string>
     <string name="pet_name">Pet Name</string>
     <string name="location">Location</string>
     <string name="caption">Caption</string>
+    <string name="remember_me">Remember Me</string>
 </resources>
