@@ -96,6 +96,10 @@ class AddPostFragment : Fragment() {
 
             uploadPost(petName, location, caption, postType, selectedDateTime)
         }
+
+        binding.btnBack.setOnClickListener {
+            findNavController().navigate(R.id.action_addPost_to_feedFragment)
+        }
     }
 
     private fun showDateTimePicker() {

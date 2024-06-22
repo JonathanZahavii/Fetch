@@ -15,4 +15,7 @@
     <string name="date_time">Date Time</string>
     <string name="where">Where</string>
     <string name="when">When</string>
+    <string name="selected_date_time">Selected Date Time</string>
+    <string name="pick_date_time">Pick Date Time</string>
+    <string name="back" />
 </resources>
