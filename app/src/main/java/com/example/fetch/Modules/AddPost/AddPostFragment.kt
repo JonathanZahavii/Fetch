@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.example.fetch.Models.Comment
 import com.example.fetch.R
 import com.example.fetch.databinding.FragmentAddPostBinding
 import com.example.fetch.models.PostType
@@ -145,7 +146,7 @@ class AddPostFragment : Fragment() {
                             caption,
                             postType,
                             dateTime,
-                            uri.toString()
+                            uri.toString(),
                         )
                     }
                 }
@@ -171,7 +172,7 @@ class AddPostFragment : Fragment() {
         caption: String,
         postType: PostType,
         dateTime: Calendar?,
-        imageUrl: String
+        imageUrl: String,
     ) {
         val currentUser = auth.currentUser
         if (currentUser == null) {
@@ -181,6 +182,9 @@ class AddPostFragment : Fragment() {
             return
         }
 
+        val initLikes = 0
+        val initComments = emptyList<Comment>()
+
         val post = hashMapOf(
             "petName" to petName,
             "location" to location,
@@ -189,7 +193,9 @@ class AddPostFragment : Fragment() {
             "userId" to currentUser.uid,
             "timestamp" to System.currentTimeMillis(),
             "postType" to postType,
-            "dateTime" to dateTime?.timeInMillis
+            "dateTime" to dateTime?.timeInMillis,
+            "likes" to initLikes,
+            "comments" to initComments
         )
 
         firestore.collection("posts").add(post)
