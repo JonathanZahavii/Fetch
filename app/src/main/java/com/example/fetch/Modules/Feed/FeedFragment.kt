@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.fetch.R
 import com.example.fetch.databinding.FragmentFeedBinding
 import com.example.fetch.models.PostType
 
@@ -35,6 +36,10 @@ class FeedFragment : Fragment() {
             val action =
                 FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.PLAYDATE.name)
             findNavController().navigate(action)
+        }
+
+        binding.btnProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_feedFragment_to_profileFragment)
         }
     }
 
