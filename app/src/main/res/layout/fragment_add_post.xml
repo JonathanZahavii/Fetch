@@ -113,7 +113,7 @@
             android:layout_marginBottom="8dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <TextView
                 android:id="@+id/tvDateTime"
