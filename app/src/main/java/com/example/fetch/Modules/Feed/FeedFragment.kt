@@ -34,24 +34,24 @@ class FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnAddPost.setOnClickListener {
+        binding.toolbar.btnAddPost.setOnClickListener {
             val action =
                 FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.SINGLE.name)
             findNavController().navigate(action)
         }
 
-        binding.btnAddPlaydate.setOnClickListener {
+        binding.toolbar.btnAddPlaydate.setOnClickListener {
             val action =
                 FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.PLAYDATE.name)
             findNavController().navigate(action)
         }
 
-        binding.btnProfile.setOnClickListener {
+        binding.toolbar.btnProfile.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_profileFragment)
         }
 
         setupRecyclerView() 
-        loadPosts() 
+        loadPosts()
     }
 
     private fun setupRecyclerView() { 
