@@ -1,4 +1,4 @@
-package com.example.fetch.modules.Adapters
+package com.example.fetch.Modules.Adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

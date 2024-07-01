@@ -19,7 +19,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.fetch.Models.Comment
 import com.example.fetch.R
 import com.example.fetch.databinding.FragmentAddPostBinding
-import com.example.fetch.models.PostType
+import com.example.fetch.Models.PostType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
