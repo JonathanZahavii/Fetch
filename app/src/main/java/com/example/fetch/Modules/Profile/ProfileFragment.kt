@@ -14,16 +14,16 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager  // NEW CODE
+import androidx.recyclerview.widget.LinearLayoutManager  
 import com.example.fetch.R
 import com.example.fetch.databinding.FragmentProfileBinding
-import com.example.fetch.Modules.Adapters.PostAdapter  // NEW CODE
-import com.example.fetch.Models.Post  // NEW CODE
+import com.example.fetch.Modules.Adapters.PostAdapter  
+import com.example.fetch.Models.Post  
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore  // NEW CODE
-import com.google.firebase.firestore.QuerySnapshot  // NEW CODE
+import com.google.firebase.firestore.FirebaseFirestore  
+import com.google.firebase.firestore.QuerySnapshot  
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Callback
@@ -40,8 +40,8 @@ class ProfileFragment : Fragment() {
     private var imageUri: Uri? = null
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
-    private lateinit var postAdapter: PostAdapter  // NEW CODE
-    private val db = FirebaseFirestore.getInstance()  // NEW CODE
+    private lateinit var postAdapter: PostAdapter  
+    private val db = FirebaseFirestore.getInstance()  
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,14 +59,14 @@ class ProfileFragment : Fragment() {
         // Load profile details
         loadProfileDetails()
 
-        // NEW CODE START
+
         postAdapter = PostAdapter()
         binding.recyclerViewPosts.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = postAdapter
         }
         loadUserPosts()
-        // NEW CODE END
+
 
         pickImageLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -101,7 +101,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    // NEW CODE START
+
     private fun loadUserPosts() {
         val currentUser = auth.currentUser
         currentUser?.let {
@@ -118,7 +118,7 @@ class ProfileFragment : Fragment() {
                 }
         }
     }
-    // NEW CODE END
+
 
     private fun loadProfileDetails() {
         val currentUser = auth.currentUser

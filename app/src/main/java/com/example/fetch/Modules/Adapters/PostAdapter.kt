@@ -34,7 +34,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.PostViewHolder>(PostViewHolder
                 Date(post.timestamp)
             )
             // Load image using an image loading library like Glide or Picasso
-            Picasso.get().load(post.imageUrl).into(binding.ivImage)  // NEW CODE        }
+            Picasso.get().load(post.imageUrl).into(binding.ivImage)
     }
 
     class PostDiffCallback : DiffUtil.ItemCallback<Post>() {

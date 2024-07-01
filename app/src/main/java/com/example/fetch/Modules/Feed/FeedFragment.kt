@@ -20,8 +20,8 @@ class FeedFragment : Fragment() {
 
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
-    private val db = FirebaseFirestore.getInstance() // NEW CODE
-    private lateinit var postAdapter: PostAdapter // NEW CODE
+    private val db = FirebaseFirestore.getInstance() 
+    private lateinit var postAdapter: PostAdapter 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,31 +50,31 @@ class FeedFragment : Fragment() {
             findNavController().navigate(R.id.action_feedFragment_to_profileFragment)
         }
 
-        setupRecyclerView() // NEW CODE
-        loadPosts() // NEW CODE
+        setupRecyclerView() 
+        loadPosts() 
     }
 
-    private fun setupRecyclerView() { // NEW CODE
-        postAdapter = PostAdapter() // NEW CODE
-        binding.recyclerView.apply { // NEW CODE
-            layoutManager = LinearLayoutManager(context) // NEW CODE
-            adapter = postAdapter // NEW CODE
-        } // NEW CODE
-    } // NEW CODE
+    private fun setupRecyclerView() { 
+        postAdapter = PostAdapter() 
+        binding.recyclerView.apply { 
+            layoutManager = LinearLayoutManager(context) 
+            adapter = postAdapter 
+        } 
+    } 
 
-    private fun loadPosts() { // NEW CODE
-        db.collection("posts") // NEW CODE
-            .orderBy("timestamp", Query.Direction.DESCENDING) // NEW CODE
-            .get() // NEW CODE
-            .addOnSuccessListener { result -> // NEW CODE
-                val posts = result.toObjects(Post::class.java) // NEW CODE
-                postAdapter.submitList(posts) // NEW CODE
-            } // NEW CODE
-            .addOnFailureListener { exception -> // NEW CODE
-                // Handle the error // NEW CODE
-                Log.e("FeedFragment", "Error getting documents: ", exception) // NEW CODE
-            } // NEW CODE
-    } // NEW CODE
+    private fun loadPosts() { 
+        db.collection("posts") 
+            .orderBy("timestamp", Query.Direction.DESCENDING) 
+            .get() 
+            .addOnSuccessListener { result -> 
+                val posts = result.toObjects(Post::class.java) 
+                postAdapter.submitList(posts) 
+            } 
+            .addOnFailureListener { exception -> 
+                // Handle the error 
+                Log.e("FeedFragment", "Error getting documents: ", exception) 
+            } 
+    } 
 
     override fun onDestroyView() {
         super.onDestroyView()
