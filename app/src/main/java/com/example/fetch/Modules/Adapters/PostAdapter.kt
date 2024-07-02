@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.recyclerview.widget.DiffUtil
-import com.example.fetch.Models.PostType
+import com.example.fetch.Models.PostTypes
 import com.squareup.picasso.Picasso
 
 class PostAdapter : ListAdapter<Post, PostAdapter.PostViewHolder>(PostViewHolder.PostDiffCallback())  {
@@ -36,7 +36,7 @@ class PostAdapter : ListAdapter<Post, PostAdapter.PostViewHolder>(PostViewHolder
                 Date(post.timestamp)
             )
 
-            if (post.type == PostType.PLAYDATE.name) {
+            if (post.postType == PostTypes.PLAYDATE.name) {
                 binding.tvPlaydateWith.visibility = View.VISIBLE
                 binding.tvPetName.text = post.petName // Set pet name as usual
             } else {

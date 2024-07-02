@@ -11,6 +11,6 @@ interface PostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(post: Post)
 
-    @Query("SELECT * FROM posts WHERE type = :type")
-    fun getPostsByType(type: String): List<Post>
+    @Query("SELECT * FROM posts WHERE postType = :postType")
+    fun getPostsByPostType(postType: String): List<Post>
 }

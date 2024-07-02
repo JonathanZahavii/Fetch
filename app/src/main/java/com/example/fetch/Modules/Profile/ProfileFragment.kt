@@ -20,8 +20,7 @@ import com.example.fetch.R
 import com.example.fetch.databinding.FragmentProfileBinding
 import com.example.fetch.Modules.Adapters.PostAdapter  
 import com.example.fetch.Models.Post
-import com.example.fetch.Models.PostType
-import com.example.fetch.Modules.Feed.FeedFragmentDirections
+import com.example.fetch.Models.PostTypes
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -65,13 +64,13 @@ class ProfileFragment : Fragment() {
 
         binding.toolbarProfile.btnAddPost.setOnClickListener {
             val action =
-                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostType.SINGLE.name)
+                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostTypes.SINGLE.name)
             findNavController().navigate(action)
         }
 
         binding.toolbarProfile.btnAddPlaydate.setOnClickListener {
             val action =
-                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostType.PLAYDATE.name)
+                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostTypes.PLAYDATE.name)
             findNavController().navigate(action)
         }
 

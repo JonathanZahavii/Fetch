@@ -10,12 +10,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.fetch.Models.Post
 import com.example.fetch.R
 import com.example.fetch.dao.AppDatabase
 import com.example.fetch.databinding.FragmentFeedBinding
-import com.example.fetch.Models.PostType
+import com.example.fetch.Models.PostTypes
 import com.example.fetch.Modules.Adapters.PostAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -44,13 +43,13 @@ class FeedFragment : Fragment() {
 
         binding.toolbarFeed.btnAddPost.setOnClickListener {
             val action =
-                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.SINGLE.name)
+                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostTypes.SINGLE.name)
             findNavController().navigate(action)
         }
 
         binding.toolbarFeed.btnAddPlaydate.setOnClickListener {
             val action =
-                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.PLAYDATE.name)
+                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostTypes.PLAYDATE.name)
             findNavController().navigate(action)
         }
 
@@ -100,7 +99,7 @@ class FeedFragment : Fragment() {
         lifecycleScope.launch {
             val postDao = AppDatabase.getDatabase(requireContext()).postDao()
             val cachedPosts = withContext(Dispatchers.IO) {
-                postDao.getPostsByType(PostType.SINGLE.name) + postDao.getPostsByType(PostType.PLAYDATE.name)
+                postDao.getPostsByPostType(PostTypes.SINGLE.name) + postDao.getPostsByPostType(PostTypes.PLAYDATE.name)
             }
             allPosts = cachedPosts
             postAdapter.submitList(cachedPosts)

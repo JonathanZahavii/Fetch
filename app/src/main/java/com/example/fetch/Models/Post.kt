@@ -1,5 +1,6 @@
 package com.example.fetch.Models
 
+import androidx.annotation.Nullable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -13,5 +14,5 @@ data class Post(
     @ColumnInfo(name = "petName") var petName: String = "",
     @ColumnInfo(name = "timestamp") var timestamp: Long = 0,
     @ColumnInfo(name = "userId") var userId: String = "",
-    @ColumnInfo(name = "type") var type: String = ""
+    @ColumnInfo(name = "postType") var postType: String = ""
 )

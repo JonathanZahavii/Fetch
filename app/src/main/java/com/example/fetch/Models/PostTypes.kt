@@ -1,5 +1,5 @@
 package com.example.fetch.Models
 
-enum class PostType {
+enum class PostTypes {
     SINGLE, PLAYDATE
 }

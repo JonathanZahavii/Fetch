@@ -19,7 +19,7 @@ import androidx.navigation.fragment.navArgs
 import com.example.fetch.Models.Comment
 import com.example.fetch.R
 import com.example.fetch.databinding.FragmentAddPostBinding
-import com.example.fetch.Models.PostType
+import com.example.fetch.Models.PostTypes
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -69,8 +69,8 @@ class AddPostFragment : Fragment() {
             pickImageLauncher.launch(intent)
         }
 
-        val postType = PostType.valueOf(args.postType)
-        if (postType == PostType.PLAYDATE) {
+        val postType = PostTypes.valueOf(args.postType)
+        if (postType == PostTypes.PLAYDATE) {
             binding.dateTimeLayout.visibility = View.VISIBLE
         } else {
             binding.dateTimeLayout.visibility = View.GONE
@@ -86,7 +86,7 @@ class AddPostFragment : Fragment() {
             val caption = binding.etCaption.text.toString().trim()
 
             if (petName.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null ||
-                (postType == PostType.PLAYDATE && selectedDateTime == null)
+                (postType == PostTypes.PLAYDATE && selectedDateTime == null)
             ) {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -132,7 +132,7 @@ class AddPostFragment : Fragment() {
         petName: String,
         location: String,
         caption: String,
-        postType: PostType,
+        postType: PostTypes,
         dateTime: Calendar?
     ) {
         val storageRef = storage.reference.child("posts/${UUID.randomUUID()}")
@@ -170,7 +170,7 @@ class AddPostFragment : Fragment() {
         petName: String,
         location: String,
         caption: String,
-        postType: PostType,
+        postType: PostTypes,
         dateTime: Calendar?,
         imageUrl: String,
     ) {
