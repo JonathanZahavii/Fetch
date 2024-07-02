@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +22,8 @@ class FeedFragment : Fragment() {
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
     private val db = FirebaseFirestore.getInstance() 
-    private lateinit var postAdapter: PostAdapter 
+    private lateinit var postAdapter: PostAdapter
+    private var allPosts: List<Post> = emptyList()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,8 +52,26 @@ class FeedFragment : Fragment() {
             findNavController().navigate(R.id.action_feedFragment_to_profileFragment)
         }
 
-        setupRecyclerView() 
+        setupRecyclerView()
         loadPosts()
+
+        binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                if (!query.isNullOrEmpty()) {
+                    searchPosts(query!!)
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                if (!newText.isNullOrEmpty()) {
+                    searchPosts(newText!!)
+                } else {
+                    postAdapter.submitList(allPosts) // Reset to all posts if search bar is empty
+                }
+                return false
+            }
+        })
     }
 
     private fun setupRecyclerView() { 
@@ -60,21 +80,32 @@ class FeedFragment : Fragment() {
             layoutManager = LinearLayoutManager(context) 
             adapter = postAdapter 
         } 
-    } 
+    }
 
-    private fun loadPosts() { 
-        db.collection("posts") 
-            .orderBy("timestamp", Query.Direction.DESCENDING) 
-            .get() 
-            .addOnSuccessListener { result -> 
-                val posts = result.toObjects(Post::class.java) 
-                postAdapter.submitList(posts) 
-            } 
-            .addOnFailureListener { exception -> 
-                // Handle the error 
-                Log.e("FeedFragment", "Error getting documents: ", exception) 
-            } 
-    } 
+    private fun loadPosts() {
+        db.collection("posts")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                val posts = result.toObjects(Post::class.java)
+                allPosts = posts
+                postAdapter.submitList(posts) // Initial data set
+            }
+            .addOnFailureListener { exception ->
+                // Handle the error
+                Log.e("FeedFragment", "Error getting documents: ", exception)
+            }
+    }
+
+    private fun searchPosts(query: String) {
+        val filteredPosts = allPosts.filter { post ->
+            // Search logic - check caption, location, and pet name
+            post.caption?.contains(query, ignoreCase = true) ?: false ||
+                    post.location?.contains(query, ignoreCase = true) ?: false ||
+                    post.petName?.contains(query, ignoreCase = true) ?: false
+        }
+        postAdapter.submitList(filteredPosts) // Update adapter with filtered data
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
