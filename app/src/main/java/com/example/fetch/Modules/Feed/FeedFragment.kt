@@ -7,21 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.fetch.Models.Post
 import com.example.fetch.R
+import com.example.fetch.dao.AppDatabase
 import com.example.fetch.databinding.FragmentFeedBinding
 import com.example.fetch.Models.PostType
 import com.example.fetch.Modules.Adapters.PostAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FeedFragment : Fragment() {
 
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
-    private val db = FirebaseFirestore.getInstance() 
+    private val db = FirebaseFirestore.getInstance()
     private lateinit var postAdapter: PostAdapter
     private var allPosts: List<Post> = emptyList()
 
@@ -36,23 +42,25 @@ class FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.toolbar.btnAddPost.setOnClickListener {
+        binding.toolbarFeed.btnAddPost.setOnClickListener {
             val action =
                 FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.SINGLE.name)
             findNavController().navigate(action)
         }
 
-        binding.toolbar.btnAddPlaydate.setOnClickListener {
+        binding.toolbarFeed.btnAddPlaydate.setOnClickListener {
             val action =
                 FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.PLAYDATE.name)
             findNavController().navigate(action)
         }
 
-        binding.toolbar.btnProfile.setOnClickListener {
+        binding.toolbarFeed.btnProfile.setOnClickListener {
             findNavController().navigate(R.id.action_feedFragment_to_profileFragment)
         }
 
         setupRecyclerView()
+        setupSwipeRefreshLayout()
+        loadCachedPosts()
         loadPosts()
 
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -74,12 +82,29 @@ class FeedFragment : Fragment() {
         })
     }
 
-    private fun setupRecyclerView() { 
-        postAdapter = PostAdapter() 
-        binding.recyclerView.apply { 
-            layoutManager = LinearLayoutManager(context) 
-            adapter = postAdapter 
-        } 
+    private fun setupRecyclerView() {
+        postAdapter = PostAdapter()
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = postAdapter
+        }
+    }
+
+    private fun setupSwipeRefreshLayout() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            loadPosts()
+        }
+    }
+
+    private fun loadCachedPosts() {
+        lifecycleScope.launch {
+            val postDao = AppDatabase.getDatabase(requireContext()).postDao()
+            val cachedPosts = withContext(Dispatchers.IO) {
+                postDao.getPostsByType(PostType.SINGLE.name) + postDao.getPostsByType(PostType.PLAYDATE.name)
+            }
+            allPosts = cachedPosts
+            postAdapter.submitList(cachedPosts)
+        }
     }
 
     private fun loadPosts() {
@@ -90,19 +115,33 @@ class FeedFragment : Fragment() {
                 val posts = result.toObjects(Post::class.java)
                 allPosts = posts
                 postAdapter.submitList(posts) // Initial data set
+                cachePosts(posts)
+                binding.swipeRefreshLayout.isRefreshing = false // Stop the refresh animation
             }
             .addOnFailureListener { exception ->
                 // Handle the error
                 Log.e("FeedFragment", "Error getting documents: ", exception)
+                binding.swipeRefreshLayout.isRefreshing = false // Stop the refresh animation
             }
+    }
+
+    private fun cachePosts(posts: List<Post>) {
+        lifecycleScope.launch {
+            val postDao = AppDatabase.getDatabase(requireContext()).postDao()
+            withContext(Dispatchers.IO) {
+                posts.forEach { post ->
+                    postDao.insert(post)
+                }
+            }
+        }
     }
 
     private fun searchPosts(query: String) {
         val filteredPosts = allPosts.filter { post ->
             // Search logic - check caption, location, and pet name
-            post.caption?.contains(query, ignoreCase = true) ?: false ||
-                    post.location?.contains(query, ignoreCase = true) ?: false ||
-                    post.petName?.contains(query, ignoreCase = true) ?: false
+            post.caption.contains(query, ignoreCase = true) ||
+                    post.location.contains(query, ignoreCase = true) ||
+                    post.petName.contains(query, ignoreCase = true)
         }
         postAdapter.submitList(filteredPosts) // Update adapter with filtered data
     }

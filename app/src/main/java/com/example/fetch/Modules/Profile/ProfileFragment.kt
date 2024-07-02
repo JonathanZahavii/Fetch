@@ -25,7 +25,8 @@ import com.example.fetch.Modules.Feed.FeedFragmentDirections
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore  
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot  
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
@@ -62,13 +63,13 @@ class ProfileFragment : Fragment() {
         // Load profile details
         loadProfileDetails()
 
-        binding.toolbar.btnAddPost.setOnClickListener {
+        binding.toolbarProfile.btnAddPost.setOnClickListener {
             val action =
                 ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostType.SINGLE.name)
             findNavController().navigate(action)
         }
 
-        binding.toolbar.btnAddPlaydate.setOnClickListener {
+        binding.toolbarProfile.btnAddPlaydate.setOnClickListener {
             val action =
                 ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostType.PLAYDATE.name)
             findNavController().navigate(action)
@@ -121,6 +122,7 @@ class ProfileFragment : Fragment() {
         currentUser?.let {
             db.collection("posts")
                 .whereEqualTo("userId", it.uid)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { querySnapshot: QuerySnapshot ->
                     val posts = querySnapshot.toObjects(Post::class.java)

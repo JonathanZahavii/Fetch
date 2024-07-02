@@ -1,18 +1,39 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
-        <!-- Declare ViewModel or variables here if needed -->
-    </data>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:layout_marginBottom="25dp"
+        android:layout_marginTop="25dp">
+
+        <TextView
+            android:id="@+id/tvPlaydateWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Playdate With"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#316A85"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/tvPetName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pet Name"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="4dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@id/tvPlaydateWith"/>
 
         <ImageView
             android:id="@+id/ivImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
+            android:layout_below="@id/tvPetName"
             android:scaleType="centerCrop" />
 
         <TextView
@@ -21,32 +42,46 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/ivImage"
             android:text="Caption"
-            android:textSize="16sp"
+            android:textSize="22dp"
             android:layout_marginTop="8dp" />
+
+        <!-- Add title to Location field -->
+        <TextView
+            android:id="@+id/tvLocationTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tvCaption"
+            android:text="Location:"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginTop="4dp" />
 
         <TextView
             android:id="@+id/tvLocation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvCaption"
+            android:layout_toEndOf="@id/tvLocationTitle"
+            android:layout_alignBaseline="@id/tvLocationTitle"
             android:text="Location"
-            android:textSize="14sp"
-            android:layout_marginTop="4dp" />
+            android:textSize="14sp" />
 
+        <!-- Add title to Post Time field -->
         <TextView
-            android:id="@+id/tvPetName"
+            android:id="@+id/tvTimestampTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvLocation"
-            android:text="Pet Name"
+            android:layout_below="@id/tvLocationTitle"
+            android:text="Post Time:"
             android:textSize="14sp"
+            android:textStyle="bold"
             android:layout_marginTop="4dp" />
 
         <TextView
             android:id="@+id/tvTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvPetName"
+            android:layout_toEndOf="@id/tvTimestampTitle"
+            android:layout_alignBaseline="@id/tvTimestampTitle"
             android:text="Timestamp"
             android:textSize="14sp"
             android:layout_marginTop="4dp" />

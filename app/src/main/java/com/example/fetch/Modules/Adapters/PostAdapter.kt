@@ -1,6 +1,7 @@
 package com.example.fetch.Modules.Adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +12,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import androidx.recyclerview.widget.DiffUtil
+import com.example.fetch.Models.PostType
 import com.squareup.picasso.Picasso
 
 class PostAdapter : ListAdapter<Post, PostAdapter.PostViewHolder>(PostViewHolder.PostDiffCallback())  {
@@ -33,6 +35,15 @@ class PostAdapter : ListAdapter<Post, PostAdapter.PostViewHolder>(PostViewHolder
             binding.tvTimestamp.text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
                 Date(post.timestamp)
             )
+
+            if (post.type == PostType.PLAYDATE.name) {
+                binding.tvPlaydateWith.visibility = View.VISIBLE
+                binding.tvPetName.text = post.petName // Set pet name as usual
+            } else {
+                binding.tvPlaydateWith.visibility = View.GONE
+                // Update pet name formatting or styling for non-playdate posts if needed
+            }
+
             // Load image using an image loading library like Glide or Picasso
             Picasso.get().load(post.imageUrl).into(binding.ivImage)
     }
