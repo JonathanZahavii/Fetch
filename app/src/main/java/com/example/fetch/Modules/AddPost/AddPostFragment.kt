@@ -26,7 +26,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.UUID
 
 class AddPostFragment : Fragment() {
@@ -76,6 +78,11 @@ class AddPostFragment : Fragment() {
                 binding.etPetName.setText(post.petName)
                 binding.etLocation.setText(post.location)
                 binding.etCaption.setText(post.caption)
+
+                val date = Date(args.post?.timestamp!!)
+                val formatter = SimpleDateFormat("d/M/yyyy H:mm")
+                binding.tvDateTime.text = formatter.format(date)
+
                 imageUri = Uri.parse(post.imageUrl)
 
                 Picasso.get()
