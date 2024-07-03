@@ -14,15 +14,18 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager  
 import com.example.fetch.R
 import com.example.fetch.databinding.FragmentProfileBinding
 import com.example.fetch.Modules.Adapters.PostAdapter  
-import com.example.fetch.Models.Post  
+import com.example.fetch.Models.Post
+import com.example.fetch.Models.PostTypes
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore  
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot  
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
@@ -59,6 +62,17 @@ class ProfileFragment : Fragment() {
         // Load profile details
         loadProfileDetails()
 
+        binding.toolbarProfile.btnAddPost.setOnClickListener {
+            val action =
+                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostTypes.SINGLE.name)
+            findNavController().navigate(action)
+        }
+
+        binding.toolbarProfile.btnAddPlaydate.setOnClickListener {
+            val action =
+                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostTypes.PLAYDATE.name)
+            findNavController().navigate(action)
+        }
 
         postAdapter = PostAdapter()
         binding.recyclerViewPosts.apply {
@@ -107,6 +121,7 @@ class ProfileFragment : Fragment() {
         currentUser?.let {
             db.collection("posts")
                 .whereEqualTo("userId", it.uid)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener { querySnapshot: QuerySnapshot ->
                     val posts = querySnapshot.toObjects(Post::class.java)

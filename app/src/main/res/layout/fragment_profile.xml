@@ -5,6 +5,10 @@
     android:layout_height="match_parent"
     tools:context=".Modules.Profile.ProfileFragment">
 
+    <include
+        layout="@layout/toolbar_layout"
+        android:id="@+id/toolbarProfile"/>
+
     <ImageView
         android:id="@+id/ivProfileImage"
         android:layout_width="100dp"

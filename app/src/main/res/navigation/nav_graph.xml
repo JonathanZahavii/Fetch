@@ -49,6 +49,9 @@
         <action
             android:id="@+id/action_profileFragment_to_feedFragment"
             app:destination="@id/feedFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_addPostFragment"
+            app:destination="@id/addPostFragment" />
     </fragment>
 
     <fragment
@@ -62,5 +65,8 @@
         <action
             android:id="@+id/action_addPost_to_feedFragment"
             app:destination="@id/feedFragment" />
+        <action
+            android:id="@+id/action_addPost_to_profileFragment"
+            app:destination="@id/profileFragment" />
     </fragment>
 </navigation>
