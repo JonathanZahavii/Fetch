@@ -73,6 +73,10 @@ class PostAdapter(
                 binding.btnDeletePost.visibility = View.GONE
             }
 
+            binding.btnJoin.setOnClickListener {
+                Toast.makeText(binding.root.context, "Joined Playdate!", Toast.LENGTH_SHORT).show()
+            }
+
             // Load image using an image loading library like Glide or Picasso
             Picasso.get().load(post.imageUrl).into(binding.ivImage)
 
