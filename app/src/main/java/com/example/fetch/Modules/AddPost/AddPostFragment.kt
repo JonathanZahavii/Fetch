@@ -76,6 +76,20 @@ class AddPostFragment : Fragment() {
                 binding.etPetName.setText(post.petName)
                 binding.etLocation.setText(post.location)
                 binding.etCaption.setText(post.caption)
+
+                val postCalendar = Calendar.getInstance().apply {
+                    timeInMillis = args.post!!.timestamp
+                }
+                val dayOfMonth = postCalendar.get(Calendar.DAY_OF_MONTH)
+                val month = postCalendar.get(Calendar.MONTH) + 1 // Months are 0-based in Calendar
+                val year = postCalendar.get(Calendar.YEAR)
+                val hourOfDay = postCalendar.get(Calendar.HOUR_OF_DAY)
+                val minute = postCalendar.get(Calendar.MINUTE)
+
+                val formatDateTime = "$dayOfMonth/$month/$year $hourOfDay:$minute"
+                binding.tvDateTime.text = formatDateTime
+                selectedDateTime = postCalendar
+
                 imageUri = Uri.parse(post.imageUrl)
 
                 Picasso.get()
@@ -130,7 +144,11 @@ class AddPostFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_addPost_to_feedFragment)
+            if (args.post !== null) {
+                findNavController().navigate(R.id.action_addPost_to_profileFragment)
+            } else {
+                findNavController().navigate(R.id.action_addPost_to_feedFragment)
+            }
         }
     }
 
@@ -245,7 +263,7 @@ class AddPostFragment : Fragment() {
             "caption" to caption,
             "imageUrl" to imageUrl,
             "userId" to currentUser.uid,
-            "timestamp" to System.currentTimeMillis(),
+            "timestamp" to dateTime?.timeInMillis,
             "postType" to postType.toString(), // Store postType as String in Firestore
             "dateTime" to dateTime?.timeInMillis,
             "likes" to initLikes,
