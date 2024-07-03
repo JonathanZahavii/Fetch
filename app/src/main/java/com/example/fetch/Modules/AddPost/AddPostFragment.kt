@@ -130,7 +130,11 @@ class AddPostFragment : Fragment() {
         }
 
         binding.btnBack.setOnClickListener {
-            findNavController().navigate(R.id.action_addPost_to_feedFragment)
+            if (args.post !== null) {
+                findNavController().navigate(R.id.action_addPost_to_profileFragment)
+            } else {
+                findNavController().navigate(R.id.action_addPost_to_feedFragment)
+            }
         }
     }
 
