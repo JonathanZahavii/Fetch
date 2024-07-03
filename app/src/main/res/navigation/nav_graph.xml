@@ -61,7 +61,12 @@
         tools:layout="@layout/fragment_add_post">
         <argument
             android:name="postType"
-            app:argType="string" />
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="post"
+            app:argType="com.example.fetch.Models.Post"
+            app:nullable="true" />
         <action
             android:id="@+id/action_addPost_to_feedFragment"
             app:destination="@id/feedFragment" />

@@ -11,11 +11,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fetch.Models.Post
+import com.example.fetch.Models.PostTypes
+import com.example.fetch.Modules.Adapters.PostAdapter
 import com.example.fetch.R
 import com.example.fetch.dao.AppDatabase
 import com.example.fetch.databinding.FragmentFeedBinding
-import com.example.fetch.Models.PostTypes
-import com.example.fetch.Modules.Adapters.PostAdapter
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import kotlinx.coroutines.Dispatchers
@@ -43,13 +43,19 @@ class FeedFragment : Fragment() {
 
         binding.toolbarFeed.btnAddPost.setOnClickListener {
             val action =
-                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostTypes.SINGLE.name)
+                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(
+                    PostTypes.SINGLE.name,
+                    null
+                )
             findNavController().navigate(action)
         }
 
         binding.toolbarFeed.btnAddPlaydate.setOnClickListener {
             val action =
-                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostTypes.PLAYDATE.name)
+                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(
+                    PostTypes.PLAYDATE.name,
+                    null
+                )
             findNavController().navigate(action)
         }
 
@@ -82,7 +88,7 @@ class FeedFragment : Fragment() {
     }
 
     private fun setupRecyclerView() {
-        postAdapter = PostAdapter()
+        postAdapter = PostAdapter(null, false, null)
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = postAdapter
@@ -99,7 +105,9 @@ class FeedFragment : Fragment() {
         lifecycleScope.launch {
             val postDao = AppDatabase.getDatabase(requireContext()).postDao()
             val cachedPosts = withContext(Dispatchers.IO) {
-                postDao.getPostsByPostType(PostTypes.SINGLE.name) + postDao.getPostsByPostType(PostTypes.PLAYDATE.name)
+                postDao.getPostsByPostType(PostTypes.SINGLE.name) + postDao.getPostsByPostType(
+                    PostTypes.PLAYDATE.name
+                )
             }
             allPosts = cachedPosts
             postAdapter.submitList(cachedPosts)

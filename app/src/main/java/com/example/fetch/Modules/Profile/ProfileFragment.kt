@@ -15,18 +15,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager  
-import com.example.fetch.R
-import com.example.fetch.databinding.FragmentProfileBinding
-import com.example.fetch.Modules.Adapters.PostAdapter  
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fetch.Models.Post
 import com.example.fetch.Models.PostTypes
+import com.example.fetch.Modules.Adapters.PostAdapter
+import com.example.fetch.R
+import com.example.fetch.databinding.FragmentProfileBinding
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot  
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.UploadTask
 import com.squareup.picasso.Callback
@@ -35,16 +35,17 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import java.io.IOException
 
-class ProfileFragment : Fragment() {
+class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
 
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var auth: FirebaseAuth
+    private lateinit var firestore: FirebaseFirestore
     private var imageUri: Uri? = null
 
     private lateinit var pickImageLauncher: ActivityResultLauncher<Intent>
-    private lateinit var postAdapter: PostAdapter  
-    private val db = FirebaseFirestore.getInstance()  
+    private lateinit var postAdapter: PostAdapter
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,23 +59,29 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
-
+        firestore = FirebaseFirestore.getInstance()
         // Load profile details
         loadProfileDetails()
 
         binding.toolbarProfile.btnAddPost.setOnClickListener {
             val action =
-                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostTypes.SINGLE.name)
+                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(
+                    PostTypes.SINGLE.name,
+                    null
+                )
             findNavController().navigate(action)
         }
 
         binding.toolbarProfile.btnAddPlaydate.setOnClickListener {
             val action =
-                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(PostTypes.PLAYDATE.name)
+                ProfileFragmentDirections.actionProfileFragmentToAddPostFragment(
+                    PostTypes.PLAYDATE.name,
+                    null
+                )
             findNavController().navigate(action)
         }
 
-        postAdapter = PostAdapter()
+        postAdapter = PostAdapter(findNavController(), true, this)
         binding.recyclerViewPosts.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = postAdapter
@@ -199,6 +206,14 @@ class ProfileFragment : Fragment() {
                 it.updateProfile(profileUpdates)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
+                            // Update Firestore with new user details
+                            val userRef = firestore.collection("users").document(currentUser.uid)
+                            val userData = hashMapOf(
+                                "displayName" to newUserName,
+                                "photoUrl" to downloadUrl
+                            )
+                            userRef.set(userData)
+
                             binding.tvUserName.text = newUserName
                             binding.tvUserName.visibility = View.VISIBLE
                             binding.etUserName.visibility = View.GONE
@@ -211,8 +226,7 @@ class ProfileFragment : Fragment() {
                                 context,
                                 "Profile updated successfully",
                                 Toast.LENGTH_SHORT
-                            )
-                                .show()
+                            ).show()
                         } else {
                             Toast.makeText(context, "Failed to update profile", Toast.LENGTH_SHORT)
                                 .show()
@@ -220,6 +234,10 @@ class ProfileFragment : Fragment() {
                     }
             }
         }
+    }
+
+    override fun onPostDeleted(post: Post) {
+        loadUserPosts()
     }
 
     override fun onDestroyView() {
