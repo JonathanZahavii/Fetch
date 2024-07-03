@@ -192,7 +192,7 @@ class AddPostFragment : Fragment() {
             "imageUrl" to imageUrl,
             "userId" to currentUser.uid,
             "timestamp" to System.currentTimeMillis(),
-            "postType" to postType,
+            "postType" to postType.toString(), // Store postType as String in Firestore
             "dateTime" to dateTime?.timeInMillis,
             "likes" to initLikes,
             "comments" to initComments
