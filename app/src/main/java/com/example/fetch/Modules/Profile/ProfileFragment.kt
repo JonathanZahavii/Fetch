@@ -81,6 +81,10 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
             findNavController().navigate(action)
         }
 
+        binding.toolbarProfile.ivLogo.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_feedFragment)
+        }
+
         postAdapter = PostAdapter(findNavController(), true, this)
         binding.recyclerViewPosts.apply {
             layoutManager = LinearLayoutManager(context)
