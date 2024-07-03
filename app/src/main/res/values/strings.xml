@@ -24,4 +24,6 @@
     <string name="edit">Edit</string>
     <string name="save">Save</string>
     <string name="profile">Profile</string>
+    <string name="edit_post">Edit Post</string>
+    <string name="delete">Delete</string>
 </resources>

@@ -1,5 +1,9 @@
 package com.example.fetch.Models
 
-enum class PostType {
-    SINGLE, PLAYDATE
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+enum class PostType : Parcelable {
+    SINGLE, PLAYDATE, OTHER
 }

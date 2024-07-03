@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fetch.Models.Post
-import com.example.fetch.R
-import com.example.fetch.databinding.FragmentFeedBinding
 import com.example.fetch.Models.PostType
 import com.example.fetch.Modules.Adapters.PostAdapter
+import com.example.fetch.R
+import com.example.fetch.databinding.FragmentFeedBinding
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 
@@ -20,8 +20,8 @@ class FeedFragment : Fragment() {
 
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
-    private val db = FirebaseFirestore.getInstance() 
-    private lateinit var postAdapter: PostAdapter 
+    private val db = FirebaseFirestore.getInstance()
+    private lateinit var postAdapter: PostAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,13 +36,19 @@ class FeedFragment : Fragment() {
 
         binding.btnAddPost.setOnClickListener {
             val action =
-                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.SINGLE.name)
+                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(
+                    PostType.SINGLE.name,
+                    null
+                )
             findNavController().navigate(action)
         }
 
         binding.btnAddPlaydate.setOnClickListener {
             val action =
-                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(PostType.PLAYDATE.name)
+                FeedFragmentDirections.actionFeedFragmentToAddPostFragment(
+                    PostType.PLAYDATE.name,
+                    null
+                )
             findNavController().navigate(action)
         }
 
@@ -50,31 +56,31 @@ class FeedFragment : Fragment() {
             findNavController().navigate(R.id.action_feedFragment_to_profileFragment)
         }
 
-        setupRecyclerView() 
-        loadPosts() 
+        setupRecyclerView()
+        loadPosts()
     }
 
-    private fun setupRecyclerView() { 
-        postAdapter = PostAdapter() 
-        binding.recyclerView.apply { 
-            layoutManager = LinearLayoutManager(context) 
-            adapter = postAdapter 
-        } 
-    } 
+    private fun setupRecyclerView() {
+        postAdapter = PostAdapter(null, false, null)
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = postAdapter
+        }
+    }
 
-    private fun loadPosts() { 
-        db.collection("posts") 
-            .orderBy("timestamp", Query.Direction.DESCENDING) 
-            .get() 
-            .addOnSuccessListener { result -> 
-                val posts = result.toObjects(Post::class.java) 
-                postAdapter.submitList(posts) 
-            } 
-            .addOnFailureListener { exception -> 
+    private fun loadPosts() {
+        db.collection("posts")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .get()
+            .addOnSuccessListener { result ->
+                val posts = result.toObjects(Post::class.java)
+                postAdapter.submitList(posts)
+            }
+            .addOnFailureListener { exception ->
                 // Handle the error 
-                Log.e("FeedFragment", "Error getting documents: ", exception) 
-            } 
-    } 
+                Log.e("FeedFragment", "Error getting documents: ", exception)
+            }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
