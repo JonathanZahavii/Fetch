@@ -120,6 +120,17 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
                 }
             }
         }
+
+        binding.btnLogout.setOnClickListener {
+            try {
+                auth.signOut()
+                findNavController().navigate(R.id.action_profileFragment_to_signInFragment)
+                Toast.makeText(context, "Logout successful", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                Log.e("ProfileFragment", "Error during logout", e)
+                Toast.makeText(context, "Logout failed: ${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
@@ -222,6 +233,7 @@ class ProfileFragment : Fragment(), PostAdapter.PostAdapterCallback {
                             if (downloadUrl != null) {
                                 Picasso.get().load(downloadUrl).into(binding.ivProfileImage)
                             }
+                            loadUserPosts()
                             Toast.makeText(
                                 context,
                                 "Profile updated successfully",

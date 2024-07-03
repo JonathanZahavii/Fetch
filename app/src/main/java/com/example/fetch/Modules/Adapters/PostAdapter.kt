@@ -95,11 +95,6 @@ class PostAdapter(
                     binding.tvUserName.text = displayName
                 } else {
                     binding.tvUserName.text = "Unknown User"
-                    Toast.makeText(
-                        binding.root.context,
-                        "Failed to retrieve display name",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         }
