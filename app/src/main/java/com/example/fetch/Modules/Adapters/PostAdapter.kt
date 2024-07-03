@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fetch.Models.Post
+import com.example.fetch.Models.PostTypes
 import com.example.fetch.Modules.Profile.ProfileFragmentDirections
 import com.example.fetch.databinding.ItemPostBinding
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,7 +26,7 @@ class PostAdapter(
     private val callback: PostAdapterCallback?
 ) :
     ListAdapter<Post, PostAdapter.PostViewHolder>(PostViewHolder.PostDiffCallback()) {
-    
+
     interface PostAdapterCallback {
         fun onPostDeleted(post: Post)
     }
@@ -56,6 +57,16 @@ class PostAdapter(
             binding.tvTimestamp.text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(
                 Date(post.timestamp)
             )
+
+            if (post.postType == PostTypes.PLAYDATE) {
+                binding.tvPlaydateWith.visibility = View.VISIBLE
+                binding.tvPetName.text = post.petName // Set pet name as usual
+
+                binding.btnJoin.visibility = View.VISIBLE
+            } else {
+                binding.tvPlaydateWith.visibility = View.GONE
+                binding.btnJoin.visibility = View.GONE
+            }
 
             if (!isEdit) {
                 binding.btnEditPost.visibility = View.GONE

@@ -1,17 +1,18 @@
 package com.example.fetch.Models
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.util.UUID
 
-@Parcelize
+@Entity(tableName = "posts")
 data class Post(
-    val postId: String = UUID.randomUUID().toString(),
-    val caption: String = "",
-    val imageUrl: String = "",
-    val location: String = "",
-    val petName: String = "",
-    val timestamp: Long = 0,
-    val userId: String = "",
-    val postType: PostType = PostType.OTHER
-) : Parcelable
+    @PrimaryKey var postId: String = UUID.randomUUID().toString(),
+    @ColumnInfo(name = "caption") var caption: String = "",
+    @ColumnInfo(name = "imageUrl") var imageUrl: String = "",
+    @ColumnInfo(name = "location") var location: String = "",
+    @ColumnInfo(name = "petName") var petName: String = "",
+    @ColumnInfo(name = "timestamp") var timestamp: Long = 0,
+    @ColumnInfo(name = "userId") var userId: String = "",
+    @ColumnInfo(name = "postType") var postType: PostTypes = PostTypes.OTHER
+)

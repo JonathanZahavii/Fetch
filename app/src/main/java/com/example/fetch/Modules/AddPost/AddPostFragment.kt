@@ -18,7 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.fetch.Models.Comment
-import com.example.fetch.Models.PostType
+import com.example.fetch.Models.PostTypes
 import com.example.fetch.R
 import com.example.fetch.databinding.FragmentAddPostBinding
 import com.google.firebase.auth.FirebaseAuth
@@ -99,8 +99,8 @@ class AddPostFragment : Fragment() {
             pickImageLauncher.launch(intent)
         }
 
-        val postType = args.post?.postType ?: PostType.valueOf(args.postType!!)
-        if (postType == PostType.PLAYDATE) {
+        val postType = args.post?.postType ?: PostTypes.valueOf(args.postType!!)
+        if (postType == PostTypes.PLAYDATE) {
             binding.dateTimeLayout.visibility = View.VISIBLE
         } else {
             binding.dateTimeLayout.visibility = View.GONE
@@ -117,7 +117,7 @@ class AddPostFragment : Fragment() {
             val postId = args.post?.postId
 
             if (petName.isEmpty() || location.isEmpty() || caption.isEmpty() || imageUri == null ||
-                (postType == PostType.PLAYDATE && selectedDateTime == null)
+                (postType == PostTypes.PLAYDATE && selectedDateTime == null)
             ) {
                 Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -163,7 +163,7 @@ class AddPostFragment : Fragment() {
         petName: String,
         location: String,
         caption: String,
-        postType: PostType,
+        postType: PostTypes,
         dateTime: Calendar?,
         postId: String?
     ) {
@@ -222,7 +222,7 @@ class AddPostFragment : Fragment() {
         petName: String,
         location: String,
         caption: String,
-        postType: PostType,
+        postType: PostTypes,
         dateTime: Calendar?,
         imageUrl: String,
         postId: String?
@@ -246,7 +246,7 @@ class AddPostFragment : Fragment() {
             "imageUrl" to imageUrl,
             "userId" to currentUser.uid,
             "timestamp" to System.currentTimeMillis(),
-            "postType" to postType,
+            "postType" to postType.toString(), // Store postType as String in Firestore
             "dateTime" to dateTime?.timeInMillis,
             "likes" to initLikes,
             "comments" to initComments,

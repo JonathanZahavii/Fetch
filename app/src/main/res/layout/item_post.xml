@@ -1,9 +1,5 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <data>
-        <!-- Declare ViewModel or variables here if needed -->
-    </data>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -40,13 +36,46 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/tvPlaydateWith"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/postHeaderLayout"
+            android:text="Playdate With"
+            android:textColor="#316A85"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tvPetName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="4dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toEndOf="@id/tvPlaydateWith"
+            android:text="Pet Name"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/ivImage"
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:layout_below="@id/postHeaderLayout"
+            android:layout_below="@id/tvPetName"
             android:scaleType="centerCrop" />
+
+        <Button
+            android:id="@+id/btnJoin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivImage"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/rounded_button_blue"
+            android:text="Join"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tvCaption"
@@ -57,31 +86,46 @@
             android:text="Caption"
             android:textSize="16sp" />
 
+        <!-- Add title to Location field -->
         <TextView
-            android:id="@+id/tvLocation"
+            android:id="@+id/tvLocationTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/tvCaption"
             android:layout_marginTop="4dp"
+            android:text="Location:"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@id/tvLocationTitle"
+            android:layout_toEndOf="@id/tvLocationTitle"
             android:text="Location"
             android:textSize="14sp" />
 
+        <!-- Add title to Post Time field -->
         <TextView
-            android:id="@+id/tvPetName"
+            android:id="@+id/tvTimestampTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvLocation"
+            android:layout_below="@id/tvLocationTitle"
             android:layout_marginTop="4dp"
-            android:text="Pet Name"
-            android:textSize="14sp" />
+            android:text="Post Time:"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvTimestamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/tvPetName"
+            android:layout_alignBaseline="@id/tvTimestampTitle"
             android:layout_marginTop="4dp"
+            android:layout_toEndOf="@id/tvTimestampTitle"
             android:text="Timestamp"
             android:textSize="14sp" />
+
     </RelativeLayout>
 </layout>

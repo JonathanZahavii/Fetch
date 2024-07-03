@@ -4,6 +4,6 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-enum class PostType : Parcelable {
+enum class PostTypes : Parcelable {
     SINGLE, PLAYDATE, OTHER
 }
